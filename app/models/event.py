@@ -11,6 +11,7 @@ class Event(BaseModel):
     OID: str = Field(..., max_length=5, description="Organizer ID")
     Name: str
     EventCategory: str
+    EventDesc: str
     Location: str
     EventDate: date
     EventTimeStart: time
@@ -25,6 +26,7 @@ class Event(BaseModel):
                 "OID": "O001",
                 "Name": "Tech Conference 2024",
                 "EventCategory": "Technology",
+                "EventDesc": "A conference for tech professionals to discuss the latest trends in technology.",
                 "Location": "Convention Center, City",
                 "EventDate": "2024-05-15",
                 "EventTimeStart": "09:00:00",

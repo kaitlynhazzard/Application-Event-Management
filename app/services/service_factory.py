@@ -1,5 +1,5 @@
 from framework.services.service_factory import BaseServiceFactory
-import app.resources.course_resource as course_resource
+import app.resources.event_resource as event_resounce
 from framework.services.data_access.MySQLRDBDataService import MySQLRDBDataService
 
 
@@ -14,9 +14,9 @@ class ServiceFactory(BaseServiceFactory):
         #
         # TODO -- The terrible, hardcoding and hacking continues.
         #
-        if service_name == 'CourseResource':
-            result = course_resource.CourseResource(config=None)
-        elif service_name == 'CourseResourceDataService':
+        if service_name == 'EventResource':
+            result = event_resounce.EventResource(config=None)
+        elif service_name == 'EventResourceDataService':
             context = dict(user="root", password="dbuserdbuser",
                            host="localhost", port=3306)
             data_service = MySQLRDBDataService(context=context)

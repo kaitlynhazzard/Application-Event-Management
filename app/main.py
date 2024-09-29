@@ -2,7 +2,7 @@ from fastapi import Depends, FastAPI
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import courses
+from app.routers import events
 
 app = FastAPI()
 
@@ -11,17 +11,16 @@ app.add_middleware(
     allow_origins=['*']
 )
 
-
-app.include_router(courses.router)
+app.include_router(events.router)
 
 
 @app.get("/")
 async def root():
-    return {"message": "Hello Bigger Applications!"}
+    return {"message": "Hello Events Applications!"}
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="localhost", port=8000)
 
 
 

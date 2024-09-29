@@ -13,7 +13,7 @@ class EventResource(BaseResource):
 
         # TODO -- Replace with dependency injection.
         #
-        self.data_service = ServiceFactory.get_service("CourseResourceDataService")
+        self.data_service = ServiceFactory.get_service("EventResourceDataService")
         self.database = "EVENTS"
         self.collection = "eve_tab"
         self.key_field="EID"
