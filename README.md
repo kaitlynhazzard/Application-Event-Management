@@ -1,2 +1,3 @@
-# Application-Event-Management
-Microservice application for creating and managing events.
+# W4153-P1-Application
+
+Simple microservice application for the first project in W4153 -- Cloud Computing.
