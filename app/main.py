@@ -12,7 +12,6 @@ app.add_middleware(
 )
 
 app.include_router(events.router)
-app.include_router(health.router)
 
 
 @app.get("/")

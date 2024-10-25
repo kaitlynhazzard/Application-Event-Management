@@ -23,7 +23,7 @@ class MySQLRDBDataService(DataDataService):
         )
         return connection
 
-    def check_connection(self, database_name: str, table_name: str):
+    def get_data_objects(self, database_name: str, table_name: str):
         """
         Check if the connection to the database is successful by selecting all data
         from a specific table.
@@ -86,17 +86,6 @@ class MySQLRDBDataService(DataDataService):
         return result
 
     def insert_data_object(self, database_name: str, collection_name: str, data: dict) -> bool:
-        """
-        Inserts a data object into the specified table in the database.
-
-        Args:
-            - database_name: Name of the database.
-            - collection_name: Name of the table to insert data into.
-            - data: A dictionary representing the data to be inserted.
-
-        Returns:
-            - True if insertion was successful, otherwise raises an Exception.
-        """
         connection = None
         try:
             # Construct the SQL insert statement
@@ -127,6 +116,58 @@ class MySQLRDBDataService(DataDataService):
                 connection.close()
 
 
+    def update_data_object(self, database_name: str, collection_name: str, key_field: str, key_value: str, data: dict) -> bool:
+        connection = None
+        try:
+            # Construct the SQL update statement
+            columns = ", ".join([f"{k}=%s" for k in data.keys()])
+            sql_statement = f"UPDATE {database_name}.{collection_name} SET {columns} WHERE {key_field}=%s"
 
+            # Get the values from the dictionary and add the key_value at the end
+            values = list(data.values()) + [key_value]
+
+            # Establish a connection and execute the query
+            connection = self._get_connection()
+            cursor = connection.cursor()
+            cursor.execute(sql_statement, values)
+
+            # Commit the transaction
+            connection.commit()
+
+            return cursor.rowcount > 0
+
+        except Exception as e:
+            if connection:
+                connection.rollback()
+            raise Exception(f"Failed to update data object: {str(e)}")
+
+        finally:
+            if connection:
+                connection.close()
+
+    def delete_data_object(self, database_name: str, collection_name: str, key_field: str, key_value: str) -> bool:
+        connection = None
+        try:
+            # Construct the SQL delete statement
+            sql_statement = f"DELETE FROM {database_name}.{collection_name} WHERE {key_field}=%s"
+
+            # Establish a connection and execute the query
+            connection = self._get_connection()
+            cursor = connection.cursor()
+            cursor.execute(sql_statement, [key_value])
+
+            # Commit the transaction
+            connection.commit()
+
+            return cursor.rowcount > 0
+
+        except Exception as e:
+            if connection:
+                connection.rollback()
+            raise Exception(f"Failed to delete data object: {str(e)}")
+
+        finally:
+            if connection:
+                connection.close()
 
 
