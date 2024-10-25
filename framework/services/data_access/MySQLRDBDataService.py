@@ -85,6 +85,46 @@ class MySQLRDBDataService(DataDataService):
 
         return result
 
+    def insert_data_object(self, database_name: str, collection_name: str, data: dict) -> bool:
+        """
+        Inserts a data object into the specified table in the database.
+
+        Args:
+            - database_name: Name of the database.
+            - collection_name: Name of the table to insert data into.
+            - data: A dictionary representing the data to be inserted.
+
+        Returns:
+            - True if insertion was successful, otherwise raises an Exception.
+        """
+        connection = None
+        try:
+            # Construct the SQL insert statement
+            columns = ", ".join(data.keys())
+            values_placeholders = ", ".join(["%s"] * len(data))
+            sql_statement = f"INSERT INTO {database_name}.{collection_name} ({columns}) VALUES ({values_placeholders})"
+
+            # Get the values from the dictionary as a tuple
+            values = tuple(data.values())
+
+            # Establish a connection and execute the query
+            connection = self._get_connection()
+            cursor = connection.cursor()
+            cursor.execute(sql_statement, values)
+
+            # Commit the transaction
+            connection.commit()
+
+            return True
+
+        except Exception as e:
+            if connection:
+                connection.rollback()
+            raise Exception(f"Failed to insert data object: {str(e)}")
+
+        finally:
+            if connection:
+                connection.close()
 
 
 
